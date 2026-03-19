@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGI Panamá - Reserva de Salones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --sgi-blue: #003366;
+            --sgi-gold: #C5A059;
+        }
+        .bg-sgi-blue { background-color: var(--sgi-blue); }
+        .text-sgi-gold { color: var(--sgi-gold); }
+        .border-sgi-gold { border-color: var(--sgi-gold); }
+        
+        /* Estilo para los checkboxes de horario */
+        .time-grid input[type="checkbox"]:checked + span {
+            background-color: var(--sgi-blue);
+            color: white;
+            border-color: var(--sgi-blue);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+    <header class="bg-sgi-blue text-white py-10 shadow-xl border-b-4 border-sgi-gold">
+        <div class="container mx-auto text-center px-4">
+            <div class="mb-4 inline-block p-3 bg-white rounded-full shadow-inner">
+                <svg class="w-12 h-12 text-sgi-blue" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2 .712V17a1 1 0 001 1z"></path></svg>
+            </div>
+            <h1 class="text-4xl font-extrabold tracking-tight uppercase">SGI Panamá</h1>
+            <p class="text-sgi-gold text-lg font-light mt-2 italic">Grupo Gajokai - Sistema de Gestión de Espacios</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12 max-w-5xl">
+        <form id="reservaForm" class="space-y-10">
+            
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-8 border-sgi-gold card">
+                <div class="p-6 bg-gray-50 border-b">
+                    <h2 class="text-xl font-bold text-sgi-blue flex items-center">
+                        <span class="mr-2">01</span> DATOS DEL SOLICITANTE
+                    </h2>
+                </div>
+                <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre Completo *</label>
+                        <input type="text" name="nombre" required placeholder="Ej: Juan Pérez" class="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-800 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">División *</label>
+                        <select name="division" required class="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-800 outline-none">
+                            <option value="">Seleccione su división...</option>
+                            <option value="Caballeros">División de Caballeros</option>
+                            <option value="Damas">División de Damas</option>
+                            <option value="DJM">División Juvenil Masculina (DJM)</option>
+                            <option value="DJF">División Juvenil Femenina (DJF)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Correo Electrónico *</label>
+                        <input type="email" name="email" required placeholder="correo@ejemplo.com" class="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-800 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Teléfono de Contacto *</label>
+                        <input type="tel" name="telefono" required placeholder="6000-0000" class="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-800 outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-8 border-sgi-gold card">
+                <div class="p-6 bg-gray-50 border-b">
+                    <h2 class="text-xl font-bold text-sgi-blue flex items-center">
+                        <span class="mr-2">02</span> DETALLES DEL EVENTO Y EQUIPO
+                    </h2>
+                </div>
+                <div class="p-8 space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha Reservada *</label>
+                            <input type="date" name="fecha" id="fechaInput" required class="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-800 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Salón Solicitado *</label>
+                            <select name="salon" required class="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-800 outline-none">
+                                <option value="Salón de la Paz">Salón de la Paz</option>
+                                <option value="Sala de Conferencias">Sala de Conferencias</option>
+                                <option value="Salón de Estudio">Salón de Estudio</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                        <p class="text-sm font-bold text-sgi-blue mb-4 uppercase tracking-wider italic">Recursos Técnicos Adicionales:</p>
+                        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                            <label class="flex items-center cursor-pointer group">
+                                <input type="checkbox" name="req" value="TV" class="w-5 h-5 rounded border-gray-300 text-blue-900">
+                                <span class="ml-2 text-sm text-gray-600 group-hover:text-blue-900 transition-colors">TV / Monitor</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer group">
+                                <input type="checkbox" name="req" value="Sillas" class="w-5 h-5 rounded border-gray-300">
+                                <span class="ml-2 text-sm text-gray-600 group-hover:text-blue-900">Sillas Extras</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer group">
+                                <input type="checkbox" name="req" value="Mesas" class="w-5 h-5 rounded border-gray-300">
+                                <span class="ml-2 text-sm text-gray-600 group-hover:text-blue-900">Mesas</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer group">
+                                <input type="checkbox" name="req" value="Audio" class="w-5 h-5 rounded border-gray-300">
+                                <span class="ml-2 text-sm text-gray-600 group-hover:text-blue-900">Sistema Audio</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer group">
+                                <input type="checkbox" name="req" value="Video" class="w-5 h-5 rounded border-gray-300">
+                                <span class="ml-2 text-sm text-gray-600 group-hover:text-blue-900">Proyector / Video</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-4 uppercase">Seleccione Bloques de Horario (8 AM - 7 PM) *</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 time-grid" id="timeGrid">
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-8 border-sgi-gold card">
+                <div class="p-6 bg-gray-50 border-b">
+                    <h2 class="text-xl font-bold text-sgi-blue flex items-center">
+                        <span class="mr-2">03</span> INFORMACIÓN ADICIONAL
+                    </h2>
+                </div>
+                <div class="p-8 space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Número Estimado de Asistentes *</label>
+                        <input type="number" name="asistentes" required min="1" placeholder="Ej: 25" class="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-800 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Objetivo de la Actividad *</label>
+                        <textarea name="objetivo" rows="4" required placeholder="Describa brevemente el propósito de la reunión..." class="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-800 outline-none"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full bg-sgi-blue hover:bg-blue-900 text-white text-xl font-bold py-5 rounded-xl shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                RESERVAR SALÓN AHORA
+            </button>
+        </form>
+
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>© 2026 SGI Panamá - Todos los derechos reservados.</p>
+            <p>Soka Gakkai Internacional de Panamá - Grupo Gajokai</p>
+        </footer>
+    </main>
+
+    <script>
+        // --- CONFIGURACIÓN ---
+        // REEMPLAZA ESTA URL CON LA DE TU GOOGLE APPS SCRIPT
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby8vg8AOy8y3J9jL4-pA15x6vVe2NQfp7h25skz3G4i67NV0yiADdSdv3OvbxfJSmMcCw/exec';
+
+        // --- INICIALIZACIÓN ---
+        document.addEventListener('DOMContentLoaded', () => {
+            inicializarCalendario();
+            generarGridHorarios();
+        });
+
+        // 1. Bloquear fechas pasadas en el calendario
+        function inicializarCalendario() {
+            const fechaInput = document.getElementById('fechaInput');
+            const hoy = new Date();
+            
+            // Formatear fecha como YYYY-MM-DD para el atributo 'min' del input date
+            const anio = hoy.getFullYear();
+            const mes = String(hoy.getMonth() + 1).padStart(2, '0'); // Meses van de 0-11
+            const dia = String(hoy.getDate()).padStart(2, '0');
+            
+            const fechaMinima = `${anio}-${mes}-${dia}`;
+            fechaInput.min = fechaMinima; // Establecer la fecha mínima seleccionable
+            fechaInput.value = fechaMinima; // Opcional: establecer por defecto el día de hoy
+        }
+
+        // 2. Generar la cuadrícula de horarios automáticamente
+        function generarGridHorarios() {
+            const timeGrid = document.getElementById('timeGrid');
+            const horas = [
+                "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", 
+                "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", 
+                "06:00 PM", "07:00 PM"
+            ];
+
+            horas.forEach(h => {
+                const label = document.createElement('label');
+                label.className = 'relative cursor-pointer';
+                label.innerHTML = `
+                    <input type="checkbox" name="hora" value="${h}" class="sr-only peer">
+                    <span class="block text-center p-3 border-2 border-gray-200 rounded-lg text-sm font-medium hover:border-sgi-blue transition-all peer-checked:bg-sgi-blue peer-checked:text-white peer-checked:border-sgi-blue">
+                        ${h}
+                    </span>
+                `;
+                timeGrid.appendChild(label);
+            });
+        }
+
+        // --- MANEJO DEL ENVÍO DEL FORMULARIO ---
+        document.getElementById('reservaForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evitar envío por defecto del navegador
+
+            // 3. Validación avanzada: Asegurar que al menos un horario esté seleccionado
+            const selectedHoursElements = document.querySelectorAll('input[name="hora"]:checked');
+            if (selectedHoursElements.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Horario Requerido',
+                    text: 'Por favor, selecciona al menos un bloque de hora para tu reserva.',
+                    confirmButtonColor: '#003366',
+                });
+                return; // Detener el envío
+            }
+
+            // Preparar horarios seleccionados para enviarlos como texto
+            const selectedHours = Array.from(selectedHoursElements).map(el => el.value).join(', ');
+
+            // Mostrar estado de carga (Loading)
+            Swal.fire({
+                title: 'Procesando Reserva',
+                html: 'Enviando confirmaciones y generando documentos Excel...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            // Recolectar datos del formulario
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            data.hora = selectedHours; // Reemplazar array de horas por texto unido
+
+            // Enviar datos al Google Apps Script (Backend)
+            // Usamos fetch con modo 'no-cors' para evitar problemas de CORS con GAS.
+            // Nota: Con 'no-cors' no podemos leer la respuesta, pero el envío funciona.
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                body: new URLSearchParams(data)
+            })
+            .then(() => {
+                // Asumimos éxito debido al modo 'no-cors'.
+                // Mostrar Modal de Agradecimiento
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Reserva Registrada Exitosamente!',
+                    text: 'Se ha enviado un correo de confirmación a tu dirección y el reporte Excel a la administración (ambujsgi@gmail.com).',
+                    confirmButtonText: 'Realizar nueva reserva',
+                    confirmButtonColor: '#003366',
+                    backdrop: `rgba(0,51,102,0.4)`
+                }).then(() => {
+                    // Limpiar formulario y volver arriba
+                    document.getElementById('reservaForm').reset();
+                    inicializarCalendario(); // Reiniciar fecha a hoy
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Conexión',
+                    text: 'No se pudo procesar la reserva. Por favor, verifica tu conexión a internet e intenta de nuevo.',
+                    confirmButtonColor: '#003366',
+                });
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
