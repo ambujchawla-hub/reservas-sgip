@@ -72,9 +72,7 @@
                             <option value="Damas">División de Damas</option>
                             <option value="DJM">División Juvenil Masculina</option>
                             <option value="DJF">División Juvenil Femenina</option>
-                            <option value="Científica">División Científica</option>
-                            <option value="Educativa">División Educativa</option>
-                            <option value="Cultural">División Cultural</option>
+                            <option value="Educativa">Grupo Educadores</option>
                         </select>
                     </div>
                     <div>
@@ -173,26 +171,51 @@
             const f = document.getElementById('fechaInput');
             f.min = new Date().toISOString().split('T')[0];
 
-            // 2. Generar Horarios como Lista
-            const list = document.getElementById('timeList');
-            const slots = [
-                "08:00 AM - 09:00 AM", "09:00 AM - 10:00 AM", "10:00 AM - 11:00 AM",
-                "11:00 AM - 12:00 PM", "12:00 PM - 01:00 PM", "01:00 PM - 02:00 PM",
-                "02:00 PM - 03:00 PM", "03:00 PM - 04:00 PM", "04:00 PM - 05:00 PM",
-                "05:00 PM - 06:00 PM", "06:00 PM - 07:00 PM", "07:00 PM - 08:00 PM"
-            ];
-            
-            slots.forEach(s => {
-                list.innerHTML += `
-                    <label class="time-item cursor-pointer">
-                        <input type="checkbox" name="hora" value="${s}" class="sr-only peer">
-                        <span class="block py-3 px-4 border-2 border-gray-100 rounded bg-white text-xs font-semibold text-center hover:border-sgi-gold transition-all peer-checked:bg-sgi-blue peer-checked:text-white peer-checked:border-sgi-blue shadow-sm">
-                            ${s}
-                        </span>
-                    </label>
-                `;
-            });
-        });
+        // 2. Generar Horarios como Lista
+const list = document.getElementById('timeList');
+
+// Agregar el encabezado solicitado
+const heading = document.createElement('h3');
+heading.textContent = "Hora de la actividad: Favor seleccionar la hora de las aquí detalladas.";
+list.before(heading);
+
+const schedule = {
+    "Lunes, Miércoles y Viernes": [
+        "04:00 PM - 05:30 PM", 
+        "06:00 PM - 07:30 PM"
+    ],
+    "Sábados": [
+        "08:00 AM - 09:30 AM", 
+        "10:00 AM - 11:30 AM", 
+        "02:00 PM - 03:30 PM",
+        "04:00 PM - 05:30 PM", 
+        "06:00 PM - 07:30 PM"
+    ],
+    "Domingos": [
+        "08:00 AM - 09:30 AM", 
+        "10:00 AM - 11:30 AM", 
+        "02:00 PM - 03:30 PM"
+    ]
+};
+
+// Limpiar lista existente
+list.innerHTML = "";
+
+// Generar la lista estructurada por días
+for (const [day, times] of Object.entries(schedule)) {
+    const dayItem = document.createElement('li');
+    dayItem.innerHTML = `<strong>Para ${day}:</strong>`;
+    
+    const subList = document.createElement('ul');
+    times.forEach(slot => {
+        const slotItem = document.createElement('li');
+        slotItem.textContent = slot;
+        subList.appendChild(slotItem);
+    });
+    
+    dayItem.appendChild(subList);
+    list.appendChild(dayItem);
+}
 
         document.getElementById('reservaForm').addEventListener('submit', function(e) {
             e.preventDefault();
