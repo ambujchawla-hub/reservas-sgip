@@ -16,7 +16,6 @@
         .text-sgi-gold { color: var(--sgi-gold); }
         .border-sgi-gold { border-color: var(--sgi-gold); }
         
-        /* Estilo para los bloques de horas tipo lista */
         .time-item input[type="checkbox"]:checked + span {
             background-color: var(--sgi-blue);
             color: white;
@@ -106,7 +105,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-4 text-center">Bloques de Horas (Seleccione todos los que apliquen) *</label>
+                        <label class="block text-sm font-bold text-sgi-blue mb-4 text-center">
+                            Hora de la actividad: Favor seleccionar la hora de las aquí detalladas.
+                        </label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" id="timeList">
                             </div>
                     </div>
@@ -162,59 +163,56 @@
     </footer>
 
     <script>
-        // REEMPLAZAR CON TU URL DE APPS SCRIPT
         const SCRIPT_URL = 'TU_URL_DE_GOOGLE_APPS_SCRIPT';
 
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Fecha mínima (Hoy)
             const f = document.getElementById('fechaInput');
             f.min = new Date().toISOString().split('T')[0];
 
-        // 2. Generar Horarios como Lista
-const list = document.getElementById('timeList');
+            const list = document.getElementById('timeList');
 
-// Agregar el encabezado solicitado
-const heading = document.createElement('h3');
-heading.textContent = "Hora de la actividad: Favor seleccionar la hora de las aquí detalladas.";
-list.before(heading);
+            // Definición de horarios según tus requerimientos
+            const scheduleData = [
+                {
+                    day: "Para Lunes, Miércoles y Viernes",
+                    slots: ["04:00 PM - 05:30 PM", "06:00 PM - 07:30 PM"]
+                },
+                {
+                    day: "Para los dias sábados",
+                    slots: [
+                        "08:00 AM - 09:30 AM", "10:00 AM - 11:30 AM", 
+                        "02:00 PM - 03:30 PM", "04:00 PM - 05:30 PM", 
+                        "06:00 PM - 07:30 PM"
+                    ]
+                },
+                {
+                    day: "Para los dias Domingos",
+                    slots: ["08:00 AM - 09:30 AM", "10:00 AM - 11:30 AM", "02:00 PM - 03:30 PM"]
+                }
+            ];
 
-const schedule = {
-    "Lunes, Miércoles y Viernes": [
-        "04:00 PM - 05:30 PM", 
-        "06:00 PM - 07:30 PM"
-    ],
-    "Sábados": [
-        "08:00 AM - 09:30 AM", 
-        "10:00 AM - 11:30 AM", 
-        "02:00 PM - 03:30 PM",
-        "04:00 PM - 05:30 PM", 
-        "06:00 PM - 07:30 PM"
-    ],
-    "Domingos": [
-        "08:00 AM - 09:30 AM", 
-        "10:00 AM - 11:30 AM", 
-        "02:00 PM - 03:30 PM"
-    ]
-};
+            // Generar la lista con encabezados de días
+            scheduleData.forEach(group => {
+                // Título del día (ocupa todo el ancho del grid)
+                const dayHeader = document.createElement('div');
+                dayHeader.className = "col-span-full mt-4 mb-1";
+                dayHeader.innerHTML = `<span class="text-[10px] font-extrabold text-sgi-blue uppercase italic">${group.day}:</span>`;
+                list.appendChild(dayHeader);
 
-// Limpiar lista existente
-list.innerHTML = "";
-
-// Generar la lista estructurada por días
-for (const [day, times] of Object.entries(schedule)) {
-    const dayItem = document.createElement('li');
-    dayItem.innerHTML = `<strong>Para ${day}:</strong>`;
-    
-    const subList = document.createElement('ul');
-    times.forEach(slot => {
-        const slotItem = document.createElement('li');
-        slotItem.textContent = slot;
-        subList.appendChild(slotItem);
-    });
-    
-    dayItem.appendChild(subList);
-    list.appendChild(dayItem);
-}
+                // Slots de tiempo
+                group.slots.forEach(s => {
+                    const label = document.createElement('label');
+                    label.className = "time-item cursor-pointer";
+                    label.innerHTML = `
+                        <input type="checkbox" name="hora" value="${s}" class="sr-only peer">
+                        <span class="block py-3 px-4 border-2 border-gray-100 rounded bg-white text-xs font-semibold text-center hover:border-sgi-gold transition-all peer-checked:bg-sgi-blue peer-checked:text-white peer-checked:border-sgi-blue shadow-sm">
+                            ${s}
+                        </span>
+                    `;
+                    list.appendChild(label);
+                });
+            });
+        });
 
         document.getElementById('reservaForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -233,7 +231,13 @@ for (const [day, times] of Object.entries(schedule)) {
 
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
+            
+            // Unir múltiples horas seleccionadas
             data.hora = h.map(el => el.value).join(', ');
+
+            // Unir múltiples requerimientos
+            const r = Array.from(document.querySelectorAll('input[name="req"]:checked'));
+            data.req = r.map(el => el.value).join(', ');
 
             fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) })
             .then(() => {
