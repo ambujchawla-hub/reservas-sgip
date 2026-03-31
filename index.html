@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGI Panamá - Solicitud Oficial de Salones</title>
+    <title>SGI Panamá - Solicitud de Espacios</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -16,7 +16,8 @@
         .text-sgi-gold { color: var(--sgi-gold); }
         .border-sgi-gold { border-color: var(--sgi-gold); }
         
-        .time-grid input[type="checkbox"]:checked + span {
+        /* Estilo para los bloques de horas tipo lista */
+        .time-item input[type="checkbox"]:checked + span {
             background-color: var(--sgi-blue);
             color: white;
             border-color: var(--sgi-blue);
@@ -43,7 +44,7 @@
                 SGI DE PANAMÁ
             </h1>
             <h2 class="text-xl font-semibold text-gray-700 mt-2 tracking-tight">
-                FORMULARIO DE SOLICITUD DE SALONES Y EQUIPOS
+                FORMULARIO DE SOLICITUD DE ESPACIOS Y EQUIPOS
             </h2>
             <p class="text-sgi-gold font-bold mt-1 italic uppercase text-sm tracking-widest">
                 Grupo Gajokai
@@ -60,11 +61,11 @@
                 </div>
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase">Nombre de la Actividad / Tema *</label>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase italic">Nombre de la Actividad / Tema *</label>
                         <input type="text" name="tema" required placeholder="Ej: Reunión de Diálogo Mensual" class="form-input">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase">Departamento / División *</label>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase italic">Departamento / División *</label>
                         <select name="division" required class="form-input">
                             <option value="">-- Seleccionar --</option>
                             <option value="Caballeros">División de Caballeros</option>
@@ -77,15 +78,15 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase">Responsable de la Solicitud *</label>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase italic">Responsable de la Solicitud *</label>
                         <input type="text" name="nombre" required placeholder="Nombre Completo" class="form-input">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase">Correo Electrónico *</label>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase italic">Correo Electrónico *</label>
                         <input type="email" name="email" required placeholder="correo@ejemplo.com" class="form-input">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase">Teléfono / Celular *</label>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase italic">Teléfono / Celular *</label>
                         <input type="tel" name="telefono" required placeholder="6000-0000" class="form-input">
                     </div>
                 </div>
@@ -96,42 +97,21 @@
                     <h3 class="font-bold text-sgi-blue uppercase text-sm">II. Detalles de la Reserva</h3>
                 </div>
                 <div class="p-6 space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase">Fecha Solicitada *</label>
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase italic">Fecha Solicitada *</label>
                             <input type="date" name="fecha" id="fechaInput" required class="form-input">
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase">Salón Requerido *</label>
-                            <select name="salon" required class="form-input">
-                                <option value="Salón de la Paz">Salón de la Paz (Principal)</option>
-                                <option value="Sala de Conferencias">Sala de Conferencias</option>
-                                <option value="Salón de Estudio">Salón de Estudio</option>
-                                <option value="Salón de Niños">Salón de Niños</option>
-                            </select>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase italic">Cantidad de Personas (Aprox) *</label>
+                            <input type="number" name="asistentes" required class="form-input">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-3">Bloques de Horas (Seleccione todos los que apliquen) *</label>
-                        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 time-grid" id="timeGrid">
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-4 text-center">Bloques de Horas (Seleccione todos los que apliquen) *</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" id="timeList">
                             </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase">Cantidad de Personas (Aprox) *</label>
-                            <input type="number" name="asistentes" required class="form-input">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase">Tipo de Actividad *</label>
-                            <select name="tipo_actividad" required class="form-input">
-                                <option value="Reunión">Reunión de Planificación</option>
-                                <option value="Ensayo">Ensayo / Práctica</option>
-                                <option value="Ceremonia">Ceremonia / Liturgia</option>
-                                <option value="Estudio">Estudio Budista</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -164,36 +144,49 @@
                 </div>
             </div>
 
-            <div class="text-center pt-6">
-                <p class="text-[10px] text-gray-400 mb-4 italic">Al hacer clic en enviar, usted confirma que se hace responsable del cuidado y limpieza del salón solicitado.</p>
-                <button type="submit" class="w-full md:w-auto md:px-20 bg-sgi-blue hover:bg-slate-800 text-white font-bold py-5 rounded shadow-xl uppercase tracking-widest transition-all">
-                    Registrar Solicitud Oficial
+            <div class="bg-blue-50 p-6 rounded-lg border-2 border-blue-200 text-gray-700 text-sm leading-relaxed shadow-inner">
+                <p class="font-bold text-sgi-blue mb-2 uppercase text-xs tracking-wider">Aclaración Importante:</p>
+                <p>
+                    Es importante llenar todos los datos solicitados, los salones o espacios en el centro cultural se asignarán de acuerdo al orden de llegada de cada solicitud, sin embargo de no haber disponibilidad de salón o espacio en la fecha y hora solicitada, nos estaremos comunicado vía WhatsApp o email brindándoles la opción en hora y fecha más cercana. Favor coopéremos con el cuidado de nuestras instalaciones, el Salón o espacio asignado se les entregará limpio y ordenado, agradecemos que al terminar la actividad el mismo sea devuelto en las mismas condiciones.
+                </p>
+            </div>
+
+            <div class="text-center pt-4">
+                <button type="submit" class="w-full md:w-auto md:px-24 bg-sgi-blue hover:bg-slate-800 text-white font-bold py-5 rounded shadow-xl uppercase tracking-widest transition-all border-b-4 border-black/20">
+                    Enviar Solicitud Oficial
                 </button>
             </div>
         </form>
     </main>
 
-    <footer class="bg-white py-12 border-t mt-20 text-center">
+    <footer class="bg-white py-12 border-t mt-10 text-center">
         <p class="text-sgi-blue font-bold tracking-[0.3em] italic">SGI DE PANAMÁ</p>
         <p class="text-gray-400 text-[10px] mt-2 uppercase tracking-widest">Secretaría de Reservas - Grupo Gajokai</p>
     </footer>
 
     <script>
+        // REEMPLAZAR CON TU URL DE APPS SCRIPT
         const SCRIPT_URL = 'TU_URL_DE_GOOGLE_APPS_SCRIPT';
 
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Fecha mínima hoy
+            // 1. Fecha mínima (Hoy)
             const f = document.getElementById('fechaInput');
             f.min = new Date().toISOString().split('T')[0];
 
-            // 2. Generar Horas
-            const grid = document.getElementById('timeGrid');
-            const slots = ["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"];
+            // 2. Generar Horarios como Lista
+            const list = document.getElementById('timeList');
+            const slots = [
+                "08:00 AM - 09:00 AM", "09:00 AM - 10:00 AM", "10:00 AM - 11:00 AM",
+                "11:00 AM - 12:00 PM", "12:00 PM - 01:00 PM", "01:00 PM - 02:00 PM",
+                "02:00 PM - 03:00 PM", "03:00 PM - 04:00 PM", "04:00 PM - 05:00 PM",
+                "05:00 PM - 06:00 PM", "06:00 PM - 07:00 PM", "07:00 PM - 08:00 PM"
+            ];
+            
             slots.forEach(s => {
-                grid.innerHTML += `
-                    <label class="cursor-pointer">
+                list.innerHTML += `
+                    <label class="time-item cursor-pointer">
                         <input type="checkbox" name="hora" value="${s}" class="sr-only peer">
-                        <span class="block text-center py-2 px-1 border rounded text-[10px] font-bold peer-checked:bg-sgi-blue peer-checked:text-white border-gray-200 hover:border-sgi-gold transition-all">
+                        <span class="block py-3 px-4 border-2 border-gray-100 rounded bg-white text-xs font-semibold text-center hover:border-sgi-gold transition-all peer-checked:bg-sgi-blue peer-checked:text-white peer-checked:border-sgi-blue shadow-sm">
                             ${s}
                         </span>
                     </label>
@@ -205,11 +198,16 @@
             e.preventDefault();
             const h = Array.from(document.querySelectorAll('input[name="hora"]:checked'));
             if (h.length === 0) { 
-                Swal.fire('Atención', 'Seleccione al menos una hora.', 'warning'); 
+                Swal.fire('Atención', 'Por favor, seleccione al menos un horario.', 'warning'); 
                 return; 
             }
 
-            Swal.fire({ title: 'Procesando...', text: 'Enviando formulario a sgip.reservas@gmail.com', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            Swal.fire({ 
+                title: 'Procesando...', 
+                text: 'Enviando solicitud a sgip.reservas@gmail.com', 
+                allowOutsideClick: false, 
+                didOpen: () => Swal.showLoading() 
+            });
 
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
@@ -219,13 +217,13 @@
             .then(() => {
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Solicitud Exitosa!',
-                    text: 'Se ha generado el registro y el correo administrativo.',
+                    title: '¡Solicitud Enviada!',
+                    text: 'Se ha registrado su solicitud correctamente.',
                     confirmButtonText: 'Finalizar',
                     confirmButtonColor: '#003366'
                 }).then(() => location.reload());
             })
-            .catch(() => Swal.fire('Error', 'No se pudo conectar con el servidor.', 'error'));
+            .catch(() => Swal.fire('Error', 'Hubo un error de conexión.', 'error'));
         });
     </script>
 </body>
